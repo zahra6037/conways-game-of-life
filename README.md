@@ -239,6 +239,18 @@ Missing board returns `404 Not Found` with ProblemDetails:
 }
 ```
 
+---
+## Agent Skills
+
+This repository includes agent skill instructions under `.github/skills/`.
+
+If you are using an AI coding agent, it should load these skills automatically when working in this repo:
+
+- `.github/skills/debugging/SKILL.md` — guidance for diagnosing API, validation, persistence, and HTTP contract issues
+- `.github/skills/testing/SKILL.md` — guidance for writing and running tests for the API, application, and domain layers
+
+These skills are intended to help agents follow the project’s conventions and troubleshoot issues consistently.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
