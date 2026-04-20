@@ -52,3 +52,9 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# JetBrains IDE
+.idea/
+*.iml*.db
+*.db-shm
+*.db-wal
