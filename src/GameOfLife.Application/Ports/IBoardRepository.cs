@@ -1,3 +1,5 @@
+using GameOfLife.Domain.Entities;
+
 namespace GameOfLife.Application.Ports;
 
 public interface IBoardRepository

@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "Conway's Game of Life API",
+    "_postman_id": "9b3c8e2a-1c8a-4d5e-9d6e-91d2c0a4b001",
+    "description": "RESTful API for Conway's Game of Life (.NET 8). Cells are encoded as integers: 1 = alive, 0 = dead. All non-2xx responses follow RFC 7807 (application/problem+json).\n\n## Variables\n- `baseUrl` — defaults to `http://localhost:5000`.\n- `boardId` — populated automatically by the **Upload Board** request's test script.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "boardId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Upload Board (square block)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('boardId looks valid', () => pm.expect(body.boardId).to.match(/^board_[0-9a-f]{32}_\\d+$/));",
+              "pm.test('generation is 0', () => pm.expect(body.generation).to.eql(0));",
+              "pm.collectionVariables.set('boardId', body.boardId);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/api/boards", "host": ["{{baseUrl}}"], "path": ["api", "boards"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"grid\": [\n    [1, 1],\n    [1, 1]\n  ]\n}"
+        },
+        "description": "Upload a new board. The example payload is a 2x2 block — a still life that never changes."
+      }
+    },
+    {
+      "name": "1b. Upload Board (blinker oscillator)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('boardId', pm.response.json().boardId);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/api/boards", "host": ["{{baseUrl}}"], "path": ["api", "boards"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"grid\": [\n    [0, 0, 0, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 1, 0, 0],\n    [0, 0, 0, 0, 0]\n  ]\n}"
+        },
+        "description": "A vertical blinker — period-2 oscillator. Use this to exercise the cycle-detecting `final` endpoint."
+      }
+    },
+    {
+      "name": "Get Stored Board",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/boards/{{boardId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "boards", "{{boardId}}"]
+        }
+      }
+    },
+    {
+      "name": "2. Get Next State",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/boards/{{boardId}}/next",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "boards", "{{boardId}}", "next"]
+        }
+      }
+    },
+    {
+      "name": "3. Get N States Ahead",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/boards/{{boardId}}/states/5",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "boards", "{{boardId}}", "states", "5"]
+        },
+        "description": "Returns the board after exactly N generations. Replace `5` with any non-negative integer up to `MaxN` (100,000)."
+      }
+    },
+    {
+      "name": "4. Get Final State",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/boards/{{boardId}}/final",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "boards", "{{boardId}}", "final"]
+        },
+        "description": "Runs the simulation until the board reaches a still life or repeats a previous state (cycle detected) and returns it. The `generation` field on the response indicates how many iterations it took. The server runs up to a hard ceiling of 100,000 generations; if the board still hasn't stabilized, returns 422 with an RFC 7807 problem document."
+      }
+    },
+    {
+      "name": "Errors / 400 invalid grid value",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/api/boards", "host": ["{{baseUrl}}"], "path": ["api", "boards"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"grid\": [\n    [1, 2]\n  ]\n}"
+        },
+        "description": "Cells must be 0 or 1. Expect HTTP 400 with `application/problem+json`."
+      }
+    },
+    {
+      "name": "Errors / 400 ragged grid",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/api/boards", "host": ["{{baseUrl}}"], "path": ["api", "boards"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"grid\": [\n    [1, 0],\n    [1]\n  ]\n}"
+        },
+        "description": "All rows must share the same length. Expect HTTP 400 naming the offending row."
+      }
+    },
+    {
+      "name": "Errors / 404 unknown board",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/boards/board_doesnotexist_0/next",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "boards", "board_doesnotexist_0", "next"]
+        },
+        "description": "Unknown or malformed board ids return HTTP 404 with a problem document containing the requested `boardId`."
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 namespace GameOfLife.Domain.Exceptions;
 
-public class BoardNotFoundException
+public class BoardNotFoundException : Exception
 {
     public string BoardId { get; }
     public BoardNotFoundException(string boardId) 

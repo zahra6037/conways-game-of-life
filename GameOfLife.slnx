@@ -1,0 +1,13 @@
+<Solution>
+    <Folder Name="/src/">
+        <Project Path="src/GameOfLife.API/GameOfLife.API.csproj" />
+        <Project Path="src/GameOfLife.Application/GameOfLife.Application.csproj" />
+        <Project Path="src/GameOfLife.Domain/GameOfLife.Domain.csproj" />
+        <Project Path="src/GameOfLife.Infrastructure/GameOfLife.Infrastructure.csproj" />
+    </Folder>
+<!--    <Folder Name="/tests/">-->
+<!--        <Project Path="tests/GameOfLife.API.Tests/GameOfLife.API.Tests.csproj" />-->
+<!--        <Project Path="tests/GameOfLife.Application.Tests/GameOfLife.Application.Tests.csproj" />-->
+<!--        <Project Path="tests/GameOfLife.Domain.Tests/GameOfLife.Domain.Tests.csproj" />-->
+<!--    </Folder>-->
+</Solution>
