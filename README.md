@@ -42,7 +42,7 @@ The API will be available at:
 
 ## 📋 API Endpoints
 
-> 🧪 A ready-to-import **Postman collection** lives at [`docs/GameOfLife.postman_collection.json`](docs/GameOfLife.postman_collection.json). Import it into Postman, set the `baseUrl` collection variable (default `http://localhost:5000`), and run **Upload Board** first — the `boardId` is captured automatically and reused by the other requests.
+> A ready-to-import **Postman collection** lives at [`docs/GameOfLife.postman_collection.json`](docs/GameOfLife.postman_collection.json). Import it into Postman, set the `baseUrl` collection variable (default `http://localhost:5000`), and run **Upload Board** first — the `boardId` is captured automatically and reused by the other requests.
 >
 > 🗺️ **Architecture diagram**: [`docs/architecture.excalidraw`](docs/architecture.excalidraw) — drag onto <https://excalidraw.com> to view.
 >
