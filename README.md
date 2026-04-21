@@ -40,11 +40,11 @@ The API will be available at:
 - **HTTP**: `http://localhost:5000`
 - **Swagger UI**: `http://localhost:5000/swagger` (in development mode)
 
-## 📋 API Endpoints
+## API Endpoints
 
 > A ready-to-import **Postman collection** lives at [`docs/GameOfLife.postman_collection.json`](docs/GameOfLife.postman_collection.json). Import it into Postman, set the `baseUrl` collection variable (default `http://localhost:5000`), and run **Upload Board** first — the `boardId` is captured automatically and reused by the other requests.
 >
-> 🗺️ **Architecture diagram**: [`docs/architecture.excalidraw`](docs/architecture.excalidraw) — drag onto <https://excalidraw.com> to view.
+> **Architecture diagram**: [`docs/architecture.excalidraw`](docs/architecture.excalidraw) — drag onto <https://excalidraw.com> to view.
 >
 
 Cells are encoded as integers: `1` = alive, `0` = dead.
@@ -97,13 +97,13 @@ Returns the originally uploaded state.
 All non-2xx responses are returned as RFC 7807 `application/problem+json`
 documents with `type`, `title`, `status`, `detail` and `instance` fields.
 
-## 🎮 Conway's Game of Life Rules
+## Conway's Game of Life Rules
 
 1. **Survival**: Live cell with 2-3 neighbors survives
 2. **Birth**: Dead cell with exactly 3 neighbors becomes alive
 3. **Death**: All other cells die or remain dead
 
-## 🏗️ Architecture
+## Architecture
 
 Built using **Clean Architecture** principles:
 
@@ -123,13 +123,13 @@ Built using **Clean Architecture** principles:
     └── ExceptionHandlers/    # Error handling
 ```
 
-## 🗄️ Data Storage
+## Data Storage
 
 - **Database**: SQLite (`gameoflife.db`)
 - **Schema**: Single `Boards` table with JSON serialized cell data
 - **Auto-created**: Database and table created automatically on first run
 
-## 🔭 Logging & Tracing
+## Logging & Tracing
 
 The API emits structured logs via the default ASP.NET Core console provider, plus OpenTelemetry trace spans for both incoming HTTP requests and the domain operations (`CreateBoard`, `GetNextState`, `GetStateAhead`, `GetFinalState`). Spans are exported to a single local JSON file (`logs/traces.json`) in **Jaeger's upload format** via a custom `FileTraceExporter`, so you can drop the file straight into the Jaeger UI to inspect traces.
 
@@ -148,7 +148,7 @@ The path is resolved relative to the process working directory, so running `dotn
 2. On the Search page, use the **JSON File** upload control and select `logs/traces.json`.
 3. The trace list will populate; click any entry to see the full waterfall (HTTP server span as parent, domain spans as children, with all tags: `board.id`, `board.rows`, `board.cols`, `http.response.status_code`, etc.).
 
-## 🧪 Example Usage
+## Example Usage
 
 ### 1. Create a Blinker Pattern
 ```bash
@@ -175,7 +175,7 @@ curl "http://localhost:5000/api/boards/{boardId}/states/4"
 curl "http://localhost:5000/api/boards/{boardId}/final"
 ```
 
-## 🔧 Development
+## Development
 
 ### Build
 ```bash
@@ -199,7 +199,7 @@ GameOfLife/
     └── GameOfLife.API/
 ```
 
-## ⚡ Features
+## Features
 
 - **Clean Architecture** with proper separation of concerns
 - **SQLite Persistence** with automatic database creation
@@ -210,7 +210,7 @@ GameOfLife/
 - **Dependency Injection** throughout all layers
 - **JSON Serialization** for board state storage
 
-## 📝 Response Format
+## Response Format
 
 State responses follow this structure:
 ```json
@@ -225,7 +225,7 @@ State responses follow this structure:
 }
 ```
 
-## 🚨 Error Responses
+## Error Responses
 
 Missing board returns `404 Not Found` with ProblemDetails:
 ```json
@@ -251,6 +251,6 @@ If you are using an AI coding agent, it should load these skills automatically w
 
 These skills are intended to help agents follow the project’s conventions and troubleshoot issues consistently.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
